@@ -1,0 +1,57 @@
+.flex{
+    display: flex;
+}
+.flex-content-end{
+   justify-content:flex-end;
+}
+.flex-content-start{
+    justify-content:flex-start;
+ }
+ .flex-content-center{
+    justify-content:flex-end;
+ }
+
+ body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+ol,
+p,
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+li,
+ol,
+ul {
+  list-style: none;
+}
+
+a,
+button,
+path {
+  color: unset;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  border: unset;
+  cursor: pointer;
+}
+
+body,
+input,
+label,
+textarea,
+a,
+textarea,
+select,
+button {
+  font-family: "Gotham", sans-serif;
+}
+
+img {
+  max-width: 100%;
+}

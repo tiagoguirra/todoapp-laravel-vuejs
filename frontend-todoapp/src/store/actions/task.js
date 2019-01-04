@@ -1,0 +1,5 @@
+export const TASK_FETCH = 'TASK_FETCH'
+export const TASK_REQUEST = 'TASK_REQUEST'
+export const TASK_CREATE = 'TASK_CREATE'
+export const TASK_UPDATE = 'TASK_UPDATE'
+export const TASK_DELETE = 'TASK_DELETE'
