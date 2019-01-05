@@ -21,7 +21,7 @@
         <button type="submit" class="nav-search-btn" :style="{'right':searchStyle}" v-if="search">
           <i class="fas fa-search"></i>
         </button>
-        <button type="button" class="nav-search-add-btn" :style="{'right':addStyle}" v-if="add">
+        <button type="button" class="nav-search-add-btn" @click="saveIt" :style="{'right':addStyle}" v-if="add">
           <i class="fas fa-plus"></i>
         </button>
       </div>

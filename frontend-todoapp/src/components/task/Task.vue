@@ -14,7 +14,7 @@
           <Filters
             :search="false"
             :perpage="{active:30,value:[5, 10, 20, 30]}"
-            :status="{active:[0],value:{Close:1,Open:0}}"
+            :status="{active:[0,1],value:{Close:1,Open:0}}"
             :priority="{active:[0,1,2],value:{'No priority':0,'Low priority':1,'High priority':2}}"
             v-on:changeFilter="getFilter"
           />
@@ -22,16 +22,15 @@
         <div class="card">
           <div class="card-body">
             <TableOrder
-              :tableHeaderFilter="{id:'Id',name:'Name',priority:'Priority',status:'Status',created_at:'Created',option:'Option'}"
+              :tableHeaderFilter="{id:'Id',name:'Name',priority:'Priority',created_at:'Created',option:'Option'}"
               v-on:setOrderTable="getFilter"
             >
               <template slot="list">
                 <tr v-for="item in getTaskList" :key="item.id">
                   <th scope="row">{{item.id}}</th>
-                  <td>{{item.name}}</td>
-                  <td>{{item.priority==0?'No priority':item.priority==1?'Low priority':'High priority'}}</td>
-                  <th>{{item.status==1?'Completed':'Open'}}</th>
-                  <th>{{item.created_at}}</th>
+                  <td :class="{'task-completed':item.completed}">{{item.name}}</td>
+                  <td :class="{'task-completed':item.completed}">{{item.priority==0?'No priority':item.priority==1?'Low priority':'High priority'}}</td>                  
+                  <th :class="{'task-completed':item.completed}">{{item.created_at}}</th>
                   <th class="options">                    
                     <a class="option-btn" @click="showTask(item)">
                       <i class="fas fa-eye"></i>
@@ -41,6 +40,12 @@
                     </a>
                     <a class="option-btn" @click="deleteTask(item.id)">
                       <i class="fas fa-trash"></i>
+                    </a>
+                    <a class="option-btn" @click="notCompletedTask(item.id)" v-if="item.completed">
+                      <i class="fas fa-undo-alt"></i>
+                    </a>
+                    <a class="option-btn" @click="completedTask(item.id)" v-else>
+                      <i class="fas fa-check"></i>
                     </a>
                   </th>
                 </tr>
@@ -61,7 +66,7 @@ import CustomFilter from "@/components/template/CustomFilter";
 import filterMixin from "@/mixins/filterMixin";
 import TableOrder from "@/components/template/TableOrder";
 import Paginate from "@/components/template/Paginate";
-import { TASK_FETCH, TASK_CREATE, TASK_UPDATE, TASK_DELETE } from "@/store/actions/task";
+import { TASK_FETCH, TASK_CREATE, TASK_UPDATE, TASK_DELETE,TASK_COMPLETED,TASK_NOT_COMPLETED} from "@/store/actions/task";
 import { mapGetters } from "vuex";
 
 export default {
@@ -88,12 +93,27 @@ export default {
     },
     clearSearch() {
       this.filter = this.makeFilter({ search: "" });
+      this.getData()
     },    
     deleteTask(id) {      
       this.$store.dispatch(TASK_DELETE, { param: id }).then(resp => {
         this.getData();
         this.$vueOnToast.pop("success", "Deleted");
       });
+    },
+    notCompletedTask(id){
+      this.$store.dispatch(TASK_NOT_COMPLETED,{param:id})
+      .then(resp=>{
+        this.getData()
+        this.$vueOnToast.pop("success", "Updated");
+      })
+    },
+    completedTask(id){
+      this.$store.dispatch(TASK_COMPLETED,{param:id})
+      .then(resp=>{
+        this.getData()
+        this.$vueOnToast.pop("success", "Updated");
+      })
     },
     editTask(task) {
       console.log(task);
@@ -256,5 +276,9 @@ export default {
 .swal2-popup #swal2-content .form-group .bold {
   font-weight: 700;
   color: #484848;
+}
+.task-completed{
+  color:#ccc;
+  text-decoration: line-through;
 }
 </style>

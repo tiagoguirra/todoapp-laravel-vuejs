@@ -16,8 +16,14 @@
 
       <div class="collapse navbar-collapse flex flex-content-end" id="navbarSupportedContent">
         <ul class="navbar-nav">
-          <li class="nav-item">
+          <li class="nav-item" v-if="isAuthenticated">
             <router-link class="nav-link" to="/">Home</router-link>
+          </li>
+          <li class="nav-item" v-if="!isAuthenticated">
+            <router-link class="nav-link" to="/login">Login</router-link>
+          </li>
+          <li class="nav-item" v-if="!isAuthenticated">
+            <router-link class="nav-link" to="/register">Register</router-link>
           </li>
           <li class="nav-item dropdown" v-if="isAuthenticated">
             <a
@@ -51,7 +57,7 @@ export default {
   methods: {
     logout: function() {
       this.$store.dispatch(AUTH_LOGOUT).then(() => this.$router.push("/login"));
-    }
+    }    
   }
 };
 </script>

@@ -8,43 +8,58 @@
             <h4>Login</h4>
           </div>
           <form class="form-login" @submit.prevent="onSubmit">
-            <div class="form-group">
-              <label for="exampleInputEmail1">Name</label>
+            <div class="form-group" :class="{ 'form-group--error': $v.form.name.$error }">
+              <label>Name</label>
               <input
                 type="text"
                 class="form-control"                
                 placeholder="Enter name"
                 v-model.trim="$v.form.name.$model"
+                @input="$v.form.name.$touch()"
               >
+              <div class="error" v-if="$v.form.name.$error && !$v.form.name.required">Name is required</div>
             </div>
-            <div class="form-group">
-              <label for="exampleInputEmail1">Email address</label>
+            <div class="form-group" :class="{ 'form-group--error': $v.form.email.$error }">
+              <label>Email address</label>
               <input
                 type="email"
                 class="form-control"                
                 placeholder="Enter email"
                 v-model.trim="$v.form.email.$model"
+                @input="$v.form.email.$touch()"
               >
+              <div class="error" v-if="$v.form.email.$error && !$v.form.email.required">Email is required</div>
+              <div class="error" v-if="$v.form.email.$error && !$v.form.email.email">Email invalid</div>
             </div>
-            <div class="form-group">
-              <label for="exampleInputPassword1">Password</label>
+            <div class="form-group" :class="{ 'form-group--error': $v.form.password.$error }">
+              <label>Password</label>
               <input
                 type="password"
                 class="form-control"                
                 placeholder="Password"
                 v-model.trim="$v.form.password.$model"
+                @input="$v.form.password.$touch()"
               >
+              <div class="error" v-if="$v.form.password.$error && !$v.form.password.required">Password is required</div>
+              <div class="error" v-if="$v.form.password.$error && !$v.form.password.minLength">Password must have at least {{ $v.form.password.$params.minLength.min }} letters.</div>
             </div>
-            <div class="form-group">
-              <label for="exampleInputPassword1">Password confirm</label>
+            <div class="form-group" :class="{ 'form-group--error': $v.form.password_confirmation.$error }">
+              <label>Password confirm</label>
               <input
                 type="password"
                 class="form-control"                
                 placeholder="Password confirm"
                 v-model.trim="$v.form.password_confirmation.$model"
+                @input="$v.form.password_confirmation.$touch()"
               >
-            </div>
-            <button type="submit" class="btn btn-primary">Register</button>
+              <div class="error" v-if="$v.form.password_confirmation.$error && !$v.form.password_confirmation.required">Password confirm is required</div>
+              <div class="error" v-if="$v.form.password_confirmation.$error && !$v.form.password_confirmation.minLength">Password confirm must have at least {{ $v.form.password_confirmation.$params.minLength.min }} letters.</div>
+              <div class="error" v-if="$v.form.password_confirmation.$error && !$v.form.password_confirmation.sameAsPassword">Passwords must be identical.</div>
+            </div>            
+            <small>Already have an account? <router-link to="/login" class="login-now">LOGIN NOW</router-link></small>            
+            <br>
+            <br>
+            <button type="submit" class="btn btn-primary btn-block">Register</button>
           </form>
         </div>
       </div>
@@ -120,5 +135,12 @@ export default {
 }
 .form-login {
   padding: 15px;
+}
+.login-now{
+  outline: none;  
+  color:#007bff;
+}
+.login-now:hover{
+  text-decoration: none;  
 }
 </style>

@@ -3,7 +3,9 @@ import {
     TASK_FETCH,
     TASK_CREATE,
     TASK_UPDATE,
-    TASK_DELETE
+    TASK_DELETE,
+    TASK_COMPLETED,
+    TASK_NOT_COMPLETED
 } from '../actions/task'
 import { ERRORS_SHOW } from '../actions/errors'
 import { LOADING_SHOW, LOADING_HIDE } from '../actions/loading';
@@ -98,6 +100,36 @@ const actions = {
                     dispatch(LOADING_HIDE);
                     dispatch(ERRORS_SHOW, error);
                 })
+        })
+    },
+    [TASK_NOT_COMPLETED]: ({commit,dispatch},{param})=>{
+        return new Promise((resolve,reject)=>{
+            dispatch(LOADING_SHOW)
+            APIService.get(`${baseURI}/${param}/notcompleted`)
+            .then(resp=>{
+                resolve(resp.data)
+                dispatch(LOADING_HIDE)
+            })
+            .catch(error => {
+                reject(error);
+                dispatch(LOADING_HIDE);
+                dispatch(ERRORS_SHOW, error);
+            })
+        })
+    },
+    [TASK_COMPLETED]: ({commit,dispatch},{param})=>{
+        return new Promise((resolve,reject)=>{
+            dispatch(LOADING_SHOW)
+            APIService.get(`${baseURI}/${param}/completed`)
+            .then(resp=>{
+                resolve(resp.data)
+                dispatch(LOADING_HIDE)
+            })
+            .catch(error => {
+                reject(error);
+                dispatch(LOADING_HIDE);
+                dispatch(ERRORS_SHOW, error);
+            })
         })
     }
 }

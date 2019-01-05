@@ -108,4 +108,27 @@ class TaskController extends baseController
         }
         return $this->sendError('Bad request','Task no found by id '.$id,404);
     }
+
+    public function setCompleted($id){
+        $task = Task::where('id',$id)->where('user_id',Auth::user()->id)->first();
+        if($task){
+            $task->completed = 1;
+            if($task->save()){
+                return $this->sendResponse('Updated',ModelForApi::getElement($task),200);
+            }
+            return $this->sendError('Bad request','failure to update task',400);
+        }
+        return $this->sendError('Bad request','Task no found by id '.$id,404);
+    }
+    public function setNotCompleted($id){
+        $task = Task::where('id',$id)->where('user_id',Auth::user()->id)->first();
+        if($task){
+            $task->completed = 0;
+            if($task->save()){
+                return $this->sendResponse('Updated',ModelForApi::getElement($task),200);
+            }
+            return $this->sendError('Bad request','failure to update task',400);
+        }
+        return $this->sendError('Bad request','Task no found by id '.$id,404);
+    }
 }

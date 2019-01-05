@@ -24,6 +24,8 @@ Route::prefix('task')->group(function(){
     Route::post('/','TaskController@store');
     Route::put('/{id}','TaskController@update');
     Route::delete('/{id}','TaskController@delete');
+    Route::get('/{id}/completed','TaskController@setCompleted');
+    Route::get('/{id}/notcompleted','TaskController@setNotCompleted');
 });
 
 Route::prefix('user')->group(function(){
